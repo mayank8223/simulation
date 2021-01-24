@@ -5,13 +5,18 @@ import Colors from "./colors";
 import WebSocketInstance from "./WebSocket";
 import { Modal } from "react-bootstrap";
 
+const MINIMUM_PRESSURE = 16;
+const GAME_ID = Math.floor(Math.random()*90000) + 10000;
+const USER_ID = Math.floor(Math.random() * 90000) + 10000;
+const BUDGET = "1200";
+
 class LoginComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      game_id: "",
-      user_id: "",
-      budget: "",
+      game_id: GAME_ID,
+      user_id: USER_ID,
+      budget: BUDGET,
       grid_size: "mid",
     };
   }
@@ -66,8 +71,9 @@ class LoginComponent extends React.Component {
               <div className="login-inputbox">
                 <input
                   type="text"
-                  onChange={this.gameIdChangeHandler}
-                  value={this.state.game_id}
+                  // onChange={this.gameIdChangeHandler}
+                  value={GAME_ID}
+                  disabled={true}
                   placeholder="Simulation ID"
                   required
                   className="login-input"
@@ -80,8 +86,9 @@ class LoginComponent extends React.Component {
               <div className="login-inputbox">
                 <input
                   type="text"
-                  onChange={this.userIdChangeHandler}
+                  // onChange={this.userIdChangeHandler}
                   value={this.state.user_id}
+                  disabled={true}
                   placeholder="User ID"
                   required
                   className="login-input"
@@ -93,8 +100,9 @@ class LoginComponent extends React.Component {
               <div className="login-inputbox">
                 <input
                   type="number"
-                  onChange={this.budgetChangeHandler}
+                  // onChange={this.budgetChangeHandler}
                   value={this.state.budget}
+                  disabled={true}
                   min="0"
                   step="1"
                   placeholder="Budget"
@@ -146,7 +154,7 @@ class LoginComponent extends React.Component {
 
 class Block extends React.Component {
   render() {
-    const { isSink } = this.props;
+    const { isSink, label } = this.props;
     return (
       <div
         className="square"
@@ -161,7 +169,7 @@ class Block extends React.Component {
         {this.props.pressure}
         {isSink ? (
           <span style={{ fontSize: 16, color: "blue", fontWeight: "bold" }}>
-            Sink
+            {label ? label : "Sink"}
           </span>
         ) : null}
       </div>
@@ -171,12 +179,31 @@ class Block extends React.Component {
 
 class Grid extends React.Component {
   renderBlock(i, j) {
-    //console.log(this.props.grid[i][j])
     let color = Colors[this.props.grid[i][j]];
     let pressure = this.props.pressure[i][j];
 
-    // console.log("======= ", pressure, i, j);
-    const isSink = i == 0 && j === this.props.pressure[i].length - 1;
+    let isSink = null,
+      label = null;
+
+    const { isSubOptimal } = this.props;
+    let { fontsize } = this.props;
+    if (isSubOptimal) {
+      if (i === 9 && j === 21) {
+        isSink = true;
+        label = "1";
+      } else if (i === 9 && j === 51) {
+        isSink = true;
+        label = "2";
+      } else if (i === 30 && j === 51) {
+        isSink = true;
+        label = "3";
+      }
+      fontsize = 8;
+    } else {
+      console.log("i", i, "j", j);
+      if (i === 0 && j === this.props.pressure[i].length - 1) isSink = true;
+    }
+
     return (
       <Block
         x={i}
@@ -189,7 +216,8 @@ class Grid extends React.Component {
         dimen={this.props.dimen}
         dimenh={this.props.dimenh}
         dimenw={this.props.dimenw}
-        fontsize={this.props.fontsize}
+        fontsize={fontsize}
+        label={label}
       />
     );
   }
@@ -404,7 +432,7 @@ class ChatBar extends React.Component {
 
   componentWillReceiveProps(newProps) {
     console.log("props");
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
   renderMessages = (messages, user) => {
@@ -455,9 +483,9 @@ class ChatBar extends React.Component {
             />
           </ul>
         </div>
-        <button onClick={this.props.toggleSidebar} className="sidebar-toggle">
+        {/* <button onClick={this.props.toggleSidebar} className="sidebar-toggle">
           Chat
-        </button>
+        </button> */}
         <div className="message-input">
           <form
             onSubmit={(event) =>
@@ -483,6 +511,7 @@ class ChatBar extends React.Component {
     );
   }
 }
+
 export class Simulation extends React.Component {
   constructor(props) {
     super(props);
@@ -549,7 +578,11 @@ export class Simulation extends React.Component {
       sidebarOpen: false,
       message_list: message_list,
       timerSeconds,
-      showMarketTrends: false
+      showMarketTrends: false,
+      showSubOptimalStatement: false,
+      isSubOptimal: false,
+      problemStatement: true,
+      showEndGameModal: false,
     };
   }
   componentDidMount() {
@@ -599,11 +632,11 @@ export class Simulation extends React.Component {
     }
   }
 
-  handleReset() {
+  handleReset = () => {
     console.log("reset");
     let board = this.state.board;
     WebSocketInstance.reset(this.state.game_id, board);
-  }
+  };
 
   handleLogin = (e, game_id, budget, grid_size, user_id) => {
     e.preventDefault();
@@ -633,15 +666,16 @@ export class Simulation extends React.Component {
   };
 
   handleSwitch(event) {
-    let val = event.target.value;
+    let val = event;
+    if (typeof val !== "number") {
+      val = event.target.value;
+    }
     if (val == this.state.board) {
       return;
     }
     let board = 0;
     if (this.state.board == 0) {
-      this.setState({
-        board: 1,
-      });
+      this.setState({ board: 1 });
       board = 1;
     } else {
       this.setState({
@@ -669,12 +703,11 @@ export class Simulation extends React.Component {
     const height = parsedData["height"];
     const width = parsedData["width"];
     let board = parsedData["board"];
-    console.log(board);
-    if (board == -1) {
-      board = this.state.board;
-    }
-    console.log(board);
-    console.log(height, width);
+
+    const { isSubOptimal } = this.state;
+
+    if (board == -1) board = this.state.board;
+
     let frac = 100 / size;
     let dimen = frac.toString() + "%";
     let frach = 100 / height;
@@ -682,13 +715,11 @@ export class Simulation extends React.Component {
     let dimenh = frach.toString() + "%";
     let dimenw = fracw.toString() + "%";
     let fontsz = 0;
-    if (size == 13) {
-      fontsz = 3;
-    } else if (size == 22) {
-      fontsz = 2;
-    } else {
-      fontsz = 1.4;
-    }
+
+    if (size == 13) fontsz = 3;
+    else if (size == 22) fontsz = 2;
+    else fontsz = 1.4;
+
     let fontsize = fontsz.toString() + "vw";
     this.setState({
       loggedIn: true,
@@ -708,14 +739,69 @@ export class Simulation extends React.Component {
       fontsize: fontsize,
       board: board,
     });
-    if (pressure[0][pressure[0].length - 1]) {
-      window.location.href = `/sub-optimal-statement`;
-    }
 
+    if (isSubOptimal) {
+      const point_1 = pressure[9] && pressure[9][21];
+      const point_2 = pressure[9] && pressure[9][51];
+      const point_3 = pressure[30] && pressure[30][51];
+
+      console.log(
+        "point_1",
+        point_1,
+        typeof point_1,
+        "point_2",
+        point_2,
+        typeof point_2,
+        "point_3",
+        point_3,
+        typeof point_3
+      );
+
+      const condForPressure =
+        point_1 === "17" && point_2 === "21" && point_3 === "25";
+      const condForMoney = budget - cost >= 0;
+
+      if (condForPressure && condForMoney) {
+        // completed; show modal0
+        this.setState({ showEndGameModal: true });
+      } else if (condForPressure == true && condForMoney === false) {
+        alert(
+          "Condition not satified. Money remaining Should be greater than or equal to Zero"
+        );
+      }
+    } else {
+      if (pressure[0][pressure[0].length - 1]) {
+        console.log(pressure[0][pressure[0].length - 1]);
+
+        const cond_1 = pressure[0][pressure[0].length - 1] == MINIMUM_PRESSURE;
+        const cond_2 = budget - cost >= 0;
+
+        if (!cond_1) {
+          let game_id = this.state.game_id;
+          WebSocketInstance.alert1(game_id, 0, 0);
+          alert(
+            "Condition not satified. Pressure required = " + MINIMUM_PRESSURE
+          );
+          return;
+        }
+
+        if (!cond_2) {
+          let game_id = this.state.game_id;
+          WebSocketInstance.alert2(game_id, 0, 0);
+          alert(
+            "Condition not satified. Money remaining Should be greater than or equal to Zero"
+          );
+          return;
+        }
+        let game_id = this.state.game_id;
+        WebSocketInstance.problemStatement1_completed(game_id, 16, 0, 0);
+        this.setState({ showSubOptimalStatement: true, isSubOptimal: true });
+      }
+    }
   }
 
   chatUpdate(parsedData) {
-    console.log("chat update");
+    // console.log("chat update");
     let message_list = parsedData["message_list"];
     let messages_js = Object.entries(message_list);
     let messages_final = [];
@@ -796,6 +882,27 @@ export class Simulation extends React.Component {
     WebSocketInstance.newChatMessage(game_id, user_id, message);
   }
 
+  onHideEndGameModal = () => {
+    // TODO: on final modal close
+
+    setTimeout(() => window.location.reload(), 1000);
+  };
+
+  onHideMarketTrends = () => {
+    // TODO: on final modal close
+    this.setState({ showMarketTrends: false });
+  };
+
+  onHideProblemStatment = () => {
+    // TODO: on final modal close
+    this.setState({ problemStatement: false });
+  };
+
+  onHideSuboptimalStatement = () => {
+    this.handleSwitch(1);
+    this.setState({ showSubOptimalStatement: false });
+  };
+
   render() {
     const size = this.state.size;
     const height = this.state.height;
@@ -816,6 +923,11 @@ export class Simulation extends React.Component {
     const timerSeconds = this.state.timerSeconds;
     const showMarketTrends = this.state.showMarketTrends;
 
+    const showSubOptimalStatement = this.state.showSubOptimalStatement;
+    const isSubOptimal = this.state.isSubOptimal;
+    const problemStatement = this.state.problemStatement;
+    const showEndGameModal = this.state.showEndGameModal;
+
     let div_width = "75vw";
 
     if (height != width) {
@@ -829,9 +941,27 @@ export class Simulation extends React.Component {
     const min = parseInt(timerSeconds / 60);
     const sec = parseInt(timerSeconds % 60);
 
+    // console.log("grid", grid);
+    // console.log("pressure", pressure);
+
     return (
       <div className="" style={{ marginLeft: 20, marginTop: 5 }}>
-        <MarketTrends show={showMarketTrends} hide={() => this.setState({ showMarketTrends: false })} />
+        <GameEnd 
+          show={showEndGameModal}
+          hide={this.onHideEndGameModal}
+        />
+        <ProblemStatement
+          show={problemStatement}
+          hide={this.onHideProblemStatment }
+        />
+        <MarketTrends
+          show={showMarketTrends}
+          hide={this.onHideMarketTrends}
+        />
+        <SubOptimalStatement
+          show={showSubOptimalStatement}
+          hide={this.onHideSuboptimalStatement}
+        />
         <div className="switch" style={{ marginBottom: 15 }}>
           <div className="links">
             Feeling Lost? Here's a &nbsp;
@@ -842,21 +972,21 @@ export class Simulation extends React.Component {
               simulation
             </a>
             .
-            <button 
-              className="btn btn-primary" 
+            <button
+              className="btn btn-primary"
               onClick={() => this.setState({ showMarketTrends: true })}
-              >
-                Market trends
-              </button>
+            >
+              Market trends
+            </button>
           </div>
         </div>
-        <ChatBar
+        {/* <ChatBar
           isOpen={this.state.sidebarOpen}
           toggleSidebar={this.handleViewSidebar}
           sendMessageHandler={this.sendMessageHandler}
           messageList={message_list}
           user={user_id}
-        />
+        /> */}
         <div className="rowC " style={{ width: div_width }}>
           <Grid
             size={size}
@@ -870,6 +1000,7 @@ export class Simulation extends React.Component {
             dimenh={dimenh}
             dimenw={dimenw}
             fontsize={fontsize}
+            isSubOptimal={isSubOptimal}
           />
           <div className="lhs" style={{ fontSize: 19 }}>
             <div className="budget">
@@ -966,7 +1097,7 @@ export class Simulation extends React.Component {
 function MarketTrends(props) {
   const { show, hide } = props;
   return (
-    <Modal show={show} onHide={hide}>
+    <Modal show={show} onHide={hide} size={"lg"}>
       <Modal.Header closeButton>
         <Modal.Title>Market trends</Modal.Title>
       </Modal.Header>
@@ -974,17 +1105,116 @@ function MarketTrends(props) {
         <div className="">
           <div className="row">
             <div className="col-lg-12" style={{ margin: 10 }}>
-              <img src={"https://picsum.photos/200/300"} style={{ width: 150, height: 150 }} />
+              <img
+                src={"https://i.imgur.com/qHwWRvK.jpg"}
+                style={{ width: 608, height: 118 }}
+              />
             </div>
             <div className="col-lg-12" style={{ margin: 10 }}>
-              <img src={"https://picsum.photos/200/300"} style={{ width: 150, height: 150 }} />
+              <img
+                src={"https://i.imgur.com/ADfoOPz.jpg"}
+                style={{ width: 608, height: 118 }}
+              />
             </div>
             <div className="col-lg-12" style={{ margin: 10 }}>
-              <img src={"https://picsum.photos/200/300"} style={{ width: 150, height: 150 }} />
+              <img
+                src={"https://i.imgur.com/rxLwyFq.jpg"}
+                style={{ width: 608, height: 118 }}
+              />
             </div>
           </div>
         </div>
       </Modal.Body>
+    </Modal>
+  );
+}
+
+const SubOptimalStatement = (props) => {
+  const { show, hide } = props;
+  return (
+    <Modal show={show}>
+      <Modal.Header>
+        <Modal.Title>Project 2</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div>
+          <div>
+            <h1>Problem Statement</h1>
+            <div style={{ padding: 100 }}>
+              <div className="row">
+                <div className="col-lg-12">
+                  <h3>
+                    Abhishek(1), Ram(2), and shubham(3) needs a proper water
+                    connection with pressure of 17, 21,and 25PSI respectively
+                    help them to get the required pressure{" "}
+                  </h3>
+                  <div className="row">
+                    <div className="col-lg-10"></div>
+                    <div className="col-lg-2">
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <button
+                        className="btn btn-primary btn-lg"
+                        onClick={hide}
+                      >
+                        Sub optimal
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
+function ProblemStatement(props) {
+  const { show, hide } = props;
+  return (
+    <Modal show={show}>
+      <Modal.Header>
+        <Modal.Title>Problem statement</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h3>
+          Rohit in the city needs a water connection with a supply pressure of
+          16PSI and his budget is 1200$ help him to get a connection
+        </h3>
+      </Modal.Body>
+      <Modal.Footer>
+        <button className="btn btn-primary" onClick={hide}>
+          Close
+        </button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+function GameEnd(props) {
+  const { show, hide } = props;
+  return (
+    <Modal show={show}>
+      <Modal.Header>
+        <Modal.Title>Problem statement</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h3>--- add text --</h3>
+      </Modal.Body>
+      <Modal.Footer>
+        <button className="btn btn-primary" onClick={hide}>
+          Close
+        </button>
+      </Modal.Footer>
     </Modal>
   );
 }

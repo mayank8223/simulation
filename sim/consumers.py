@@ -772,6 +772,21 @@ class MyConsumer(AsyncWebsocketConsumer):
 
 		return pressure
 
+	async def alert1(self,json_data):
+		log = Log(game_id = json_data['game_id'],action= 'alert condition 1 does not match', location = str(json_data['i'])+ ',' + str(json_data['j']))
+		await self.save(
+			None,log
+		)
+	async def alert2(self,json_data):
+		log = Log(game_id = json_data['game_id'],action= 'alert condition 2 does not match', location = str(json_data['i'])+ ',' + str(json_data['j']))
+		await self.save(
+			None,log
+		)
+	async def problemStatement1_completed(self,json_data):
+		log = Log(game_id = json_data['game_id'], action= 'problemStatement1_completed',  info = 'minimum pressure condition meet', location = str(json_data['i'])+ ',' + str(json_data['j']), pressure = '16')
+		await self.save(
+			None,log
+		)
 	@database_sync_to_async
 	def create_message(self,game,user,content):
 		message = Chat.objects.create(sim_id=game,user=user,message=content)
@@ -848,7 +863,6 @@ class MyConsumer(AsyncWebsocketConsumer):
 						'id': game_id
 					}
 			)
-
 	async def sendMessage(self,grid,size,height,width,row,col,pressure,initial_pressure,cost,budget,board):
 		content = {
 			'command' : 'game',
@@ -917,3 +931,9 @@ class MyConsumer(AsyncWebsocketConsumer):
 			await self.switch(json_data)
 		elif json_data['command'] == 'new_message':
 			await self.new_message(json_data)
+		elif json_data['command'] == 'alert1':
+			await self.alert1(json_data)
+		elif json_data['command'] == 'alert2':
+			await self.alert2(json_data)
+		elif json_data['command'] == 'problemStatement1_completed':
+			await self.problemStatement1_completed(json_data)

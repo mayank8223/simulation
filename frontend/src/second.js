@@ -46,15 +46,15 @@ export class Second extends React.Component {
 
   render() {
     const { step1, step2, step3, step4, step5, step6 } = this.state;
-    return (
+    return (        
         <div style={{ padding: 20 }}>
         <div>
             <h1>Identify good plumbing decision</h1>
-      <div style={{ padding: 10 }}>
+      <div style={{ padding: 50 }}>
         <div className="row" style={{ marginBottom: 10 }}>
           <div className="col-lg-4">
             <PlumbingDecision
-              src={"https://picsum.photos/200/300"}
+              src={"https://i.imgur.com/khja7XQ.jpg"}
               onSelect={this.onSelect}
               name="step1"
               value={step1}
@@ -62,7 +62,7 @@ export class Second extends React.Component {
           </div>
           <div className="col-lg-4">
             <PlumbingDecision
-              src={"https://picsum.photos/200/300"}
+              src={"https://i.imgur.com/fpva4ji.jpg"}
               onSelect={this.onSelect}
               name="step2"
               value={step2}
@@ -70,7 +70,7 @@ export class Second extends React.Component {
           </div>
           <div className="col-lg-4">
             <PlumbingDecision
-              src={"https://picsum.photos/200/300"}
+              src={"https://i.imgur.com/MJeV0mu.jpg"}
               onSelect={this.onSelect}
               name="step3"
               value={step3}
@@ -80,7 +80,7 @@ export class Second extends React.Component {
         <div className="row">
           <div className="col-lg-4">
             <PlumbingDecision
-              src={"https://picsum.photos/200/300"}
+              src={"https://i.imgur.com/tukFcRD.jpg"}
               onSelect={this.onSelect}
               name="step4"
               value={step4}
@@ -88,7 +88,7 @@ export class Second extends React.Component {
           </div>
           <div className="col-lg-4">
             <PlumbingDecision
-              src={"https://picsum.photos/200/300"}
+              src={"https://i.imgur.com/EQKLmfu.jpg"}
               onSelect={this.onSelect}
               name="step5"
               value={step5}
@@ -96,7 +96,7 @@ export class Second extends React.Component {
           </div>
           <div className="col-lg-4">
             <PlumbingDecision
-              src={"https://picsum.photos/200/300"}
+              src={"https://i.imgur.com/cPMMoUI.jpg"}
               onSelect={this.onSelect}
               name="step6"
               value={step6}
@@ -115,6 +115,8 @@ export class Second extends React.Component {
         </div>
       </div>
     </div>
-    </div>);
+    </div>
+    
+    );
   }
 }

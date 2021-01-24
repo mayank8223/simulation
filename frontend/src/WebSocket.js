@@ -90,6 +90,16 @@ class WebSocketService{
     newChatMessage(game_id,user_id,message){
         this.sendMessage({command: 'new_message', game_id: game_id, user_id: user_id, message:message})
     }
+
+    alert1(game_id, i, j){
+        this.sendMessage({command: 'alert1', game_id: game_id , i:0,j:0})
+    }
+    alert2(game_id, i, j){
+        this.sendMessage({command: 'alert2', game_id: game_id , i:0,j:0})
+    }
+    problemStatement1_completed(game_id, k, i, j){
+        this.sendMessage({command: 'problemStatement1_completed',game_id:game_id, k:16,i:0,j:0})
+    }
     addCallbacks(gameCallback,chatCallback){
         this.callbacks['game'] = gameCallback;
         this.callbacks['chat'] = chatCallback;

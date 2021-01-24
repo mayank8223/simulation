@@ -31,7 +31,6 @@ class Game(models.Model):
 	pressure_sub = JSONField(default=None)
 	cost_sub = models.IntegerField(default=0)
 	budget_sub = models.IntegerField(default=0)
-
 	objects = CopyManager()
 
 class Log(models.Model):
