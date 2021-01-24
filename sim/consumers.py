@@ -787,6 +787,31 @@ class MyConsumer(AsyncWebsocketConsumer):
 		await self.save(
 			None,log
 		)
+	async def alert_sub(self,json_data):
+		log = Log(game_id = json_data['game_id'], action = 'alert_sub_optimal')
+		await self.save(
+			None,log
+		)
+	async def Finish(self,json_data):
+		log = Log(game_id = json_data['game_id'], action = 'Finished')
+		await self.save(
+			None,log
+		)
+	async def MarketTrends(self,json_data):
+		log = Log(game_id = json_data['game_id'], action = 'Market Trends checked')
+		await self.save(
+			None,log
+		)
+	async def problemStatement1_hide(self,json_data):
+		log = Log(game_id = json_data['game_id'], action = 'Readed first Problem')
+		await self.save(
+			None,log
+		)
+	async def problemStatement2_hide(self,json_data):
+		log = Log(game_id = json_data['game_id'], action = 'Readed second problem')
+		await self.save(
+			None,log
+		)
 	@database_sync_to_async
 	def create_message(self,game,user,content):
 		message = Chat.objects.create(sim_id=game,user=user,message=content)
@@ -937,3 +962,13 @@ class MyConsumer(AsyncWebsocketConsumer):
 			await self.alert2(json_data)
 		elif json_data['command'] == 'problemStatement1_completed':
 			await self.problemStatement1_completed(json_data)
+		elif json_data['command'] == 'alert_sub':
+			await self.alert_sub(json_data)
+		elif json_data['command'] == 'Finish':
+			await self.alert_sub(json_data)
+		elif json_data['command'] == 'MarketTrends':
+			await self.alert_sub(json_data)
+		elif json_data['command'] == 'problemStatement1_hide':
+			await self.alert_sub(json_data)
+		elif json_data['command'] == 'problemStatement2_hide':
+			await self.alert_sub(json_data)

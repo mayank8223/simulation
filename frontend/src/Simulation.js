@@ -765,6 +765,8 @@ export class Simulation extends React.Component {
         // completed; show modal0
         this.setState({ showEndGameModal: true });
       } else if (condForPressure == true && condForMoney === false) {
+        let game_id = this.state.game_id;
+        WebSocketInstance.alert_sub(game_id);
         alert(
           "Condition not satified. Money remaining Should be greater than or equal to Zero"
         );
@@ -884,21 +886,28 @@ export class Simulation extends React.Component {
 
   onHideEndGameModal = () => {
     // TODO: on final modal close
-
+    let game_id = this.state.game_id;
+    WebSocketInstance.Finish(game_id);
     setTimeout(() => window.location.reload(), 1000);
   };
 
   onHideMarketTrends = () => {
     // TODO: on final modal close
+    let game_id = this.state.game_id;
+    WebSocketInstance.MarketTrends(game_id);
     this.setState({ showMarketTrends: false });
   };
 
   onHideProblemStatment = () => {
     // TODO: on final modal close
+    let game_id = this.state.game_id;
+    WebSocketInstance.problemStatement1_hide(game_id);
     this.setState({ problemStatement: false });
   };
 
   onHideSuboptimalStatement = () => {
+    let game_id = this.state.game_id;
+    WebSocketInstance.problemStatement2_hide(game_id);
     this.handleSwitch(1);
     this.setState({ showSubOptimalStatement: false });
   };
