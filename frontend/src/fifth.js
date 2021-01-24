@@ -43,9 +43,3 @@ export class Fifth extends React.Component {
     }
 }
 
-
-  // how to commit 
-  // 1- save all files
-  // 2- cmd: git add .
-  // 3- cmd: git commit -m '<mg>'
-  // 4- git push origin master
