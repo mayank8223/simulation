@@ -8,7 +8,7 @@ export class Fifth extends React.Component {
         return (
             <div>
                 <div className="row">
-                    <div style={{ padding: 100 }}>
+                    <div style={{ padding: 50 }}>
                     <h2>Martket Trends</h2>
                     <div className="">
                         
@@ -17,11 +17,11 @@ export class Fifth extends React.Component {
                         </div>
                         
                             <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://i.imgur.com/qHwWRvK.jpg"} style={{width: 1216, height: 236  }} />
+                                <img src={"https://i.imgur.com/ADfoOPz.jpg"} style={{width: 1216, height: 236  }} />
                         </div>
                         
                             <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://i.imgur.com/qHwWRvK.jpg"} style={{ width: 1216, height: 236 }} />
+                                <img src={"https://i.imgur.com/rxLwyFq.jpg"} style={{ width: 1216, height: 236 }} />
                         </div>
                         <div style={{ padding: 70 }}>
                     <div className="row">
@@ -44,8 +44,4 @@ export class Fifth extends React.Component {
 }
 
 
-  // how to commit 
-  // 1- save all files
-  // 2- cmd: git add .
-  // 3- cmd: git commit -m '<mg>'
-  // 4- git push origin master
+

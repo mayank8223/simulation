@@ -1143,46 +1143,20 @@ const SubOptimalStatement = (props) => {
   return (
     <Modal show={show}>
       <Modal.Header>
-        <Modal.Title>Project 2</Modal.Title>
+        <Modal.Title>Problem statement 2</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div>
-          <div>
-            <h1>Problem Statement</h1>
-            <div style={{ padding: 100 }}>
-              <div className="row">
-                <div className="col-lg-12">
-                  <h3>
-                    Abhishek(1), Ram(2), and shubham(3) needs a proper water
-                    connection with pressure of 17, 21,and 25PSI respectively
-                    help them to get the required pressure{" "}
-                  </h3>
-                  <div className="row">
-                    <div className="col-lg-10"></div>
-                    <div className="col-lg-2">
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <button
-                        className="btn btn-primary btn-lg"
-                        onClick={hide}
-                      >
-                        Sub optimal
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h3>
+        Abhishek(1), Ram(2), and shubham(3) needs a proper water connection with pressure of 17, 21,and 25PSI respectively 
+        help them to get the required pressure and budget remaining should be greater than zero.  
+        point_1 = 17, point_2 = 21, point_3 = 25.
+        </h3>
       </Modal.Body>
+      <Modal.Footer>
+        <button className="btn btn-primary" onClick={hide}>
+          Close
+        </button>
+      </Modal.Footer>
     </Modal>
   );
 };
@@ -1192,12 +1166,12 @@ function ProblemStatement(props) {
   return (
     <Modal show={show}>
       <Modal.Header>
-        <Modal.Title>Problem statement</Modal.Title>
+        <Modal.Title>Problem statement 1</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <h3>
           Rohit in the city needs a water connection with a supply pressure of
-          16PSI and his budget is 1200$ help him to get a connection
+          16PSI and his budget is 1200$ help him to get a connection. Budget remaining should be greater than zero
         </h3>
       </Modal.Body>
       <Modal.Footer>
