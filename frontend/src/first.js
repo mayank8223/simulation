@@ -17,9 +17,7 @@ export const first = () => (
           <div className="row">
             <div className="col-lg-1"></div>
             <div className="col-lg-9">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/vBEvbEeC8wk" 
-            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-            </iframe>
+            <iframe width="620" height="400" src="https://www.youtube.com/embed/D0aIykNtWeQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               <br />
 
               <div className="row">
