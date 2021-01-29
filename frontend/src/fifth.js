@@ -43,5 +43,3 @@ export class Fifth extends React.Component {
     }
 }
 
-
-
