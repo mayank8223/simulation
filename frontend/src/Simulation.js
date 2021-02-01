@@ -200,7 +200,7 @@ class Grid extends React.Component {
       }
       fontsize = 8;
     } else {
-      console.log("i", i, "j", j);
+      // console.log("i", i, "j", j);
       if (i === 0 && j === this.props.pressure[i].length - 1) isSink = true;
     }
 
@@ -745,17 +745,17 @@ export class Simulation extends React.Component {
       const point_2 = pressure[9] && pressure[9][51];
       const point_3 = pressure[30] && pressure[30][51];
 
-      console.log(
-        "point_1",
-        point_1,
-        typeof point_1,
-        "point_2",
-        point_2,
-        typeof point_2,
-        "point_3",
-        point_3,
-        typeof point_3
-      );
+      // console.log(
+      //   "point_1",
+      //   point_1,
+      //   typeof point_1,
+      //   "point_2",
+      //   point_2,
+      //   typeof point_2,
+      //   "point_3",
+      //   point_3,
+      //   typeof point_3
+      // );
 
       const condForPressure =
         point_1 === "17" && point_2 === "21" && point_3 === "25";
@@ -823,8 +823,8 @@ export class Simulation extends React.Component {
       const board = this.state.board;
       WebSocketInstance.pipe_click(game_id, i, j, board);
       e.preventDefault();
-      console.log(e.clientX, e.clientY);
-      console.log(i, j);
+      // console.log(e.clientX, e.clientY);
+      // console.log(i, j);
       this.setState({
         menuX: e.clientX,
         menuY: e.clientY,
@@ -900,16 +900,30 @@ export class Simulation extends React.Component {
 
   onHideProblemStatment = () => {
     // TODO: on final modal close
-    let game_id = this.state.game_id;
-    WebSocketInstance.problemStatement1_hide(game_id);
     this.setState({ problemStatement: false });
+    let game_id = this.state.game_id;
+    try { 
+      console.log("game_id", game_id);
+      console.log("WebSocketInstance.problemStatement1_hide", WebSocketInstance.problemStatement1_hide);
+      WebSocketInstance.problemStatement1_hide(game_id);    
+    }
+    catch (e) {
+      console.log("problemStatement1_hide:", e);
+    }
   };
 
   onHideSuboptimalStatement = () => {
-    let game_id = this.state.game_id;
-    WebSocketInstance.problemStatement2_hide(game_id);
-    this.handleSwitch(1);
     this.setState({ showSubOptimalStatement: false });
+    
+    let game_id = this.state.game_id;
+    try {
+      console.log("game_id", game_id);
+      console.log("WebSocketInstance.problemStatement2_hide", WebSocketInstance.problemStatement2_hide);
+      this.handleSwitch(1);
+      // WebSocketInstance.problemStatement2_hide(game_id);
+    } catch (e) {
+      console.log("problemStatement2_hide", e);
+    }
   };
 
   render() {
@@ -1141,7 +1155,7 @@ function MarketTrends(props) {
 const SubOptimalStatement = (props) => {
   const { show, hide } = props;
   return (
-    <Modal show={show}>
+    <Modal show={show} onHide={hide}>
       <Modal.Header>
         <Modal.Title>Problem statement 2</Modal.Title>
       </Modal.Header>
@@ -1164,14 +1178,14 @@ const SubOptimalStatement = (props) => {
 function ProblemStatement(props) {
   const { show, hide } = props;
   return (
-    <Modal show={show}>
+    <Modal show={show} onHide={hide}>
       <Modal.Header>
         <Modal.Title>Problem statement 1</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <h3>
           Rohit in the city needs a water connection with a supply pressure of
-          16PSI and his budget is 1200$ help him to get a connection. Budget remaining should be greater than zero
+          16PSI and his budget is 1200$ help him to get a connection. udget remaining should be greater than zero
         </h3>
       </Modal.Body>
       <Modal.Footer>
@@ -1186,7 +1200,7 @@ function ProblemStatement(props) {
 function GameEnd(props) {
   const { show, hide } = props;
   return (
-    <Modal show={show}>
+    <Modal show={show} onHide={hide}>
       <Modal.Header>
         <Modal.Title>Problem statement</Modal.Title>
       </Modal.Header>

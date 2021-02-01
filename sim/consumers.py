@@ -965,10 +965,10 @@ class MyConsumer(AsyncWebsocketConsumer):
 		elif json_data['command'] == 'alert_sub':
 			await self.alert_sub(json_data)
 		elif json_data['command'] == 'Finish':
-			await self.alert_sub(json_data)
+			await self.Finish(json_data)
 		elif json_data['command'] == 'MarketTrends':
-			await self.alert_sub(json_data)
+			await self.MarketTrends(json_data)
 		elif json_data['command'] == 'problemStatement1_hide':
-			await self.alert_sub(json_data)
+			await self.problemStatement1_hide(json_data)
 		elif json_data['command'] == 'problemStatement2_hide':
-			await self.alert_sub(json_data)
+			await self.problemStatement2_hide(json_data)

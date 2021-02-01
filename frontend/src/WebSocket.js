@@ -112,8 +112,9 @@ class WebSocketService{
     problemStatement1_hide(game_id){
         this.sendMessage({command: 'problemStatement1_hide', game_id:game_id})
     }
-    problemStatement2_hide(game_id){
-        this.sendMessage({command: 'problemStatement2_hide', game_id:game_id})
+    problemStatement2_hide(game_id, cb) {
+        console.log("====>", game_id);
+        this.sendMessage({ command: 'problemStatement2_hide', game_id: game_id }, cb);
     }
 
     addCallbacks(gameCallback,chatCallback){
@@ -121,12 +122,12 @@ class WebSocketService{
         this.callbacks['chat'] = chatCallback;
     }
 
-    sendMessage(data){
+    sendMessage(data, cb){
         try{
-        	console.log('tried');
-            console.log({...data})
-            console.log(data)
+            console.log('tried');
+            console.log('data', JSON.stringify(data));
             this.socketRef.send(JSON.stringify({...data}))
+            if (cb) cb();
         }
         catch(err){
             console.log(err.message);
