@@ -773,41 +773,49 @@ class MyConsumer(AsyncWebsocketConsumer):
 		return pressure
 
 	async def alert1(self,json_data):
+		print('=====>alert 1')
 		log = Log(sim_id = json_data['game_id'],action= 'alert condition 1 does not match', location = str(json_data['i'])+ ',' + str(json_data['j']))
 		await self.save(
 			None,log
 		)
 	async def alert2(self,json_data):
+		print('=====> alert 2')
 		log = Log(sim_id = json_data['game_id'],action= 'alert condition 2 does not match', location = str(json_data['i'])+ ',' + str(json_data['j']))
 		await self.save(
 			None,log
 		)
 	async def problemStatement1_completed(self,json_data):
+		print('=====> problemStatement1_completed')
 		log = Log(sim_id = json_data['game_id'], action= 'problemStatement1_completed',  info = 'minimum pressure condition meet, pressure = 16', location = str(json_data['i'])+ ',' + str(json_data['j']))
 		await self.save(
 			None,log
 		)
 	async def alert_sub(self,json_data):
+		print('=====> alert_sub')
 		log = Log(sim_id = json_data['game_id'], action = 'alert_sub_optimal')
 		await self.save(
 			None,log
 		)
 	async def Finish(self,json_data):
+		print('=====> Finish')
 		log = Log(sim_id = json_data['game_id'], action = 'Finished')
 		await self.save(
 			None,log
 		)
 	async def MarketTrends(self,json_data):
+		print('=====> MarketTrends')
 		log = Log(sim_id = json_data['game_id'], action = 'Market Trends checked')
 		await self.save(
 			None,log
 		)
 	async def problemStatement1_hide(self,json_data):
+		print('=====> problemStatement1_hide')
 		log = Log(sim_id = json_data['game_id'], action = 'Readed first Problem')
 		await self.save(
 			None,log
 		)
 	async def problemStatement2_hide(self,json_data):
+		print('=====> problemStatement2_hide')
 		log = Log(sim_id = json_data['game_id'], action = 'Readed second problem')
 		await self.save(
 			None,log
