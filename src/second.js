@@ -46,11 +46,11 @@ export class Second extends React.Component {
 
   render() {
     const { step1, step2, step3, step4, step5, step6 } = this.state;
-    return (
+    return (        
         <div style={{ padding: 20 }}>
         <div>
             <h1>Identify good plumbing decision</h1>
-      <div style={{ padding: 10 }}>
+      <div style={{ padding: 50 }}>
         <div className="row" style={{ marginBottom: 10 }}>
           <div className="col-lg-4">
             <PlumbingDecision
@@ -108,13 +108,15 @@ export class Second extends React.Component {
 
             </div>
             <div className="col-lg-1">
-                <a href="/third">
+                <a href="/fifth">
                     <button className="btn btn-primary pull-right">Next</button>
                 </a>
             </div>
         </div>
       </div>
     </div>
-    </div>);
+    </div>
+    
+    );
   }
 }

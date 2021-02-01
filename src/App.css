@@ -399,7 +399,7 @@ label {
 
 ul{
   list-style-type: none;
-    padding:0;
+  padding:0;
 }
 
 .replies {
@@ -435,7 +435,6 @@ ul{
 }
 
 .messages{
-
   max-height: 95%;
   overflow-y: scroll;
 }
