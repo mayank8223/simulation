@@ -200,7 +200,7 @@ class Grid extends React.Component {
       }
       fontsize = 8;
     } else {
-      console.log("i", i, "j", j);
+      // console.log("i", i, "j", j);
       if (i === 0 && j === this.props.pressure[i].length - 1) isSink = true;
     }
 
@@ -745,17 +745,17 @@ export class Simulation extends React.Component {
       const point_2 = pressure[9] && pressure[9][51];
       const point_3 = pressure[30] && pressure[30][51];
 
-      console.log(
-        "point_1",
-        point_1,
-        typeof point_1,
-        "point_2",
-        point_2,
-        typeof point_2,
-        "point_3",
-        point_3,
-        typeof point_3
-      );
+      // console.log(
+      //   "point_1",
+      //   point_1,
+      //   typeof point_1,
+      //   "point_2",
+      //   point_2,
+      //   typeof point_2,
+      //   "point_3",
+      //   point_3,
+      //   typeof point_3
+      // );
 
       const condForPressure =
         point_1 === "17" && point_2 === "21" && point_3 === "25";
@@ -765,6 +765,8 @@ export class Simulation extends React.Component {
         // completed; show modal0
         this.setState({ showEndGameModal: true });
       } else if (condForPressure == true && condForMoney === false) {
+        let game_id = this.state.game_id;
+        WebSocketInstance.alert_sub(game_id);
         alert(
           "Condition not satified. Money remaining Should be greater than or equal to Zero"
         );
@@ -821,8 +823,8 @@ export class Simulation extends React.Component {
       const board = this.state.board;
       WebSocketInstance.pipe_click(game_id, i, j, board);
       e.preventDefault();
-      console.log(e.clientX, e.clientY);
-      console.log(i, j);
+      // console.log(e.clientX, e.clientY);
+      // console.log(i, j);
       this.setState({
         menuX: e.clientX,
         menuY: e.clientY,
@@ -884,23 +886,44 @@ export class Simulation extends React.Component {
 
   onHideEndGameModal = () => {
     // TODO: on final modal close
-
+    let game_id = this.state.game_id;
+    WebSocketInstance.Finish(game_id);
     setTimeout(() => window.location.reload(), 1000);
   };
 
   onHideMarketTrends = () => {
     // TODO: on final modal close
+    let game_id = this.state.game_id;
+    WebSocketInstance.MarketTrends(game_id);
     this.setState({ showMarketTrends: false });
   };
 
   onHideProblemStatment = () => {
     // TODO: on final modal close
     this.setState({ problemStatement: false });
+    let game_id = this.state.game_id;
+    try { 
+      console.log("game_id", game_id);
+      console.log("WebSocketInstance.problemStatement1_hide", WebSocketInstance.problemStatement1_hide);
+      WebSocketInstance.problemStatement1_hide(game_id);    
+    }
+    catch (e) {
+      console.log("problemStatement1_hide:", e);
+    }
   };
 
   onHideSuboptimalStatement = () => {
-    this.handleSwitch(1);
     this.setState({ showSubOptimalStatement: false });
+    
+    let game_id = this.state.game_id;
+    try {
+      console.log("game_id", game_id);
+      console.log("WebSocketInstance.problemStatement2_hide", WebSocketInstance.problemStatement2_hide);
+      this.handleSwitch(1);
+      // WebSocketInstance.problemStatement2_hide(game_id);
+    } catch (e) {
+      console.log("problemStatement2_hide", e);
+    }
   };
 
   render() {
@@ -1132,48 +1155,22 @@ function MarketTrends(props) {
 const SubOptimalStatement = (props) => {
   const { show, hide } = props;
   return (
-    <Modal show={show}>
+    <Modal show={show} onHide={hide}>
       <Modal.Header>
-        <Modal.Title>Project 2</Modal.Title>
+        <Modal.Title>Problem statement 2</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div>
-          <div>
-            <h1>Problem Statement</h1>
-            <div style={{ padding: 100 }}>
-              <div className="row">
-                <div className="col-lg-12">
-                  <h3>
-                    Abhishek(1), Ram(2), and shubham(3) needs a proper water
-                    connection with pressure of 17, 21,and 25PSI respectively
-                    help them to get the required pressure{" "}
-                  </h3>
-                  <div className="row">
-                    <div className="col-lg-10"></div>
-                    <div className="col-lg-2">
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <button
-                        className="btn btn-primary btn-lg"
-                        onClick={hide}
-                      >
-                        Sub optimal
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h3>
+        Abhishek(1), Ram(2), and shubham(3) needs a proper water connection with pressure of 17, 21,and 25PSI respectively 
+        help them to get the required pressure and budget remaining should be greater than zero.  
+        point_1 = 17, point_2 = 21, point_3 = 25.
+        </h3>
       </Modal.Body>
+      <Modal.Footer>
+        <button className="btn btn-primary" onClick={hide}>
+          Close
+        </button>
+      </Modal.Footer>
     </Modal>
   );
 };
@@ -1181,14 +1178,14 @@ const SubOptimalStatement = (props) => {
 function ProblemStatement(props) {
   const { show, hide } = props;
   return (
-    <Modal show={show}>
+    <Modal show={show} onHide={hide}>
       <Modal.Header>
-        <Modal.Title>Problem statement</Modal.Title>
+        <Modal.Title>Problem statement 1</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <h3>
           Rohit in the city needs a water connection with a supply pressure of
-          16PSI and his budget is 1200$ help him to get a connection
+          16PSI and his budget is 1200$ help him to get a connection. udget remaining should be greater than zero
         </h3>
       </Modal.Body>
       <Modal.Footer>
@@ -1203,7 +1200,7 @@ function ProblemStatement(props) {
 function GameEnd(props) {
   const { show, hide } = props;
   return (
-    <Modal show={show}>
+    <Modal show={show} onHide={hide}>
       <Modal.Header>
         <Modal.Title>Problem statement</Modal.Title>
       </Modal.Header>

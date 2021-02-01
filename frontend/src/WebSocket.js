@@ -100,17 +100,34 @@ class WebSocketService{
     problemStatement1_completed(game_id, k, i, j){
         this.sendMessage({command: 'problemStatement1_completed',game_id:game_id, k:16,i:0,j:0})
     }
+    alert_sub(game_id){
+        this.sendMessage({command: 'alert_sub',game_id:game_id})
+    }
+    Finish(game_id){
+        this.sendMessage({command: 'Finish', game_id:game_id})
+    }
+    MarketTrends(game_id){
+        this.sendMessage({command: 'MarketTrends', game_id:game_id})
+    }
+    problemStatement1_hide(game_id){
+        this.sendMessage({command: 'problemStatement1_hide', game_id:game_id})
+    }
+    problemStatement2_hide(game_id, cb) {
+        console.log("====>", game_id);
+        this.sendMessage({ command: 'problemStatement2_hide', game_id: game_id }, cb);
+    }
+
     addCallbacks(gameCallback,chatCallback){
         this.callbacks['game'] = gameCallback;
         this.callbacks['chat'] = chatCallback;
     }
 
-    sendMessage(data){
+    sendMessage(data, cb){
         try{
-        	console.log('tried');
-            console.log({...data})
-            console.log(data)
+            console.log('tried');
+            console.log('data', JSON.stringify(data));
             this.socketRef.send(JSON.stringify({...data}))
+            if (cb) cb();
         }
         catch(err){
             console.log(err.message);
