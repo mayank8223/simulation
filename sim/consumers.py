@@ -783,7 +783,7 @@ class MyConsumer(AsyncWebsocketConsumer):
 			None,log
 		)
 	async def problemStatement1_completed(self,json_data):
-		log = Log(sim_id = json_data['game_id'], action= 'problemStatement1_completed',  info = 'minimum pressure condition meet', location = str(json_data['i'])+ ',' + str(json_data['j']), pressure = '16')
+		log = Log(sim_id = json_data['game_id'], action= 'problemStatement1_completed',  info = 'minimum pressure condition meet, pressure = 16', location = str(json_data['i'])+ ',' + str(json_data['j']))
 		await self.save(
 			None,log
 		)
