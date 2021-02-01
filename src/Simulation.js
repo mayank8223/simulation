@@ -920,7 +920,7 @@ export class Simulation extends React.Component {
       console.log("game_id", game_id);
       console.log("WebSocketInstance.problemStatement2_hide", WebSocketInstance.problemStatement2_hide);
       this.handleSwitch(1);
-      // WebSocketInstance.problemStatement2_hide(game_id);
+      WebSocketInstance.problemStatement2_hide(game_id);
     } catch (e) {
       console.log("problemStatement2_hide", e);
     }
