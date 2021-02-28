@@ -168,7 +168,7 @@ class Block extends React.Component {
       >
         {this.props.pressure}
         {isSink ? (
-          <span style={{ fontSize: 16, color: "blue", fontWeight: "bold" }}>
+          <span style={{ fontSize: 18, color: "Yellow", fontWeight: "bold" }}>
             {label ? label : "Sink"}
           </span>
         ) : null}
@@ -1060,8 +1060,20 @@ export class Simulation extends React.Component {
                 handlePressureChange={this.handlePressureChange}
               />
             )}
-            {board == 1 && <div className="emptydiv" />}
+            {/* {board == 1 && <div className="emptydiv" />} */}
             <Reset onClick={this.handleReset} />
+            <div style={{ fontSize: 18 }}>              
+              <i>
+                {
+                  board === 1 ? (
+                    `Abhishek(1), Ram(2), and shubham(3) needs a proper water connection with pressure of 17, 21,and 25PSI respectively help them to get the required pressure and budget remaining should be greater than zero.`
+                  ) : (
+                    `Rohit in the city needs a water connection with a supply pressure of
+                    16PSI and his budget is 1200$ help him to get a connection. udget remaining should be greater than zero`
+                  )
+                }
+              </i>
+            </div>
           </div>
 
           {this.state.visible && (
@@ -1162,8 +1174,7 @@ const SubOptimalStatement = (props) => {
       <Modal.Body>
         <h3>
         Abhishek(1), Ram(2), and shubham(3) needs a proper water connection with pressure of 17, 21,and 25PSI respectively 
-        help them to get the required pressure and budget remaining should be greater than zero.  
-        point_1 = 17, point_2 = 21, point_3 = 25.
+        help them to get the required pressure and budget remaining should be greater than zero.
         </h3>
       </Modal.Body>
       <Modal.Footer>
