@@ -1069,7 +1069,7 @@ export class Simulation extends React.Component {
                     `Abhishek(1), Ram(2), and shubham(3) needs a proper water connection with pressure of 17, 21,and 25PSI respectively help them to get the required pressure and budget remaining should be greater than zero.`
                   ) : (
                     `Rohit in the city needs a water connection with a supply pressure of
-                    16PSI and his budget is 1200$ help him to get a connection. udget remaining should be greater than zero`
+                    16PSI and his budget is 1200₹ help him to get a connection. udget remaining should be greater than zero`
                   )
                 }
               </i>
@@ -1196,7 +1196,7 @@ function ProblemStatement(props) {
       <Modal.Body>
         <h3>
           Rohit in the city needs a water connection with a supply pressure of
-          16PSI and his budget is 1200$ help him to get a connection. udget remaining should be greater than zero
+          16PSI and his budget is 1200₹ help him to get a connection. udget remaining should be greater than zero
         </h3>
       </Modal.Body>
       <Modal.Footer>
