@@ -13,15 +13,15 @@ export class Fifth extends React.Component {
                     <div className="">
                         
                             <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://i.imgur.com/qHwWRvK.jpg"} style={{ width: 1216, height: 236 }} />
+                                <img src={"https://imgur.com/MJE0gu9.jpg"} style={{ width: 1100, height: 236 }} />
                         </div>
                         
                             <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://i.imgur.com/ADfoOPz.jpg"} style={{width: 1216, height: 236  }} />
+                                <img src={"https://imgur.com/v8Vcfbg.jpg"} style={{width: 1100, height: 236  }} />
                         </div>
                         
                             <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://i.imgur.com/rxLwyFq.jpg"} style={{ width: 1216, height: 236 }} />
+                                <img src={"https://imgur.com/boJRQDp.jpg"} style={{ width: 1100, height: 236 }} />
                         </div>
                         <div style={{ padding: 70 }}>
                     <div className="row">

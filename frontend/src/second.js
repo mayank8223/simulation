@@ -49,7 +49,7 @@ export class Second extends React.Component {
     return (        
         <div style={{ padding: 20 }}>
         <div>
-            <h1>Identify good plumbing decision</h1>
+            <h1>Identify Optimal plumbing decision</h1>
       <div style={{ padding: 50 }}>
         <div className="row" style={{ marginBottom: 10 }}>
           <div className="col-lg-4">

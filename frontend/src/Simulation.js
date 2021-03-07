@@ -1141,19 +1141,19 @@ function MarketTrends(props) {
           <div className="row">
             <div className="col-lg-12" style={{ margin: 10 }}>
               <img
-                src={"https://i.imgur.com/qHwWRvK.jpg"}
+                src={"https://imgur.com/MJE0gu9.jpg"}
                 style={{ width: 608, height: 118 }}
               />
             </div>
             <div className="col-lg-12" style={{ margin: 10 }}>
               <img
-                src={"https://i.imgur.com/ADfoOPz.jpg"}
+                src={"https://imgur.com/v8Vcfbg.jpg"}
                 style={{ width: 608, height: 118 }}
               />
             </div>
             <div className="col-lg-12" style={{ margin: 10 }}>
               <img
-                src={"https://i.imgur.com/rxLwyFq.jpg"}
+                src={"https://imgur.com/boJRQDp.jpg"}
                 style={{ width: 608, height: 118 }}
               />
             </div>
