@@ -13,17 +13,9 @@ export class Fifth extends React.Component {
                     <div className="">
                         
                             <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://imgur.com/MJE0gu9.jpg"} style={{ width: 1100, height: 236 }} />
+                                <img src={"https://i.ibb.co/KbsR9vY/Table.jpg"} style={{ width: 1000, height: 400 }} />
                         </div>
-                        
-                            <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://imgur.com/v8Vcfbg.jpg"} style={{width: 1100, height: 236  }} />
-                        </div>
-                        
-                            <div className="col-lg-12" style={{ margin: 10 }}>
-                                <img src={"https://imgur.com/boJRQDp.jpg"} style={{ width: 1100, height: 236 }} />
-                        </div>
-                        <div style={{ padding: 70 }}>
+                    <div style={{ padding: 70 }}>
                     <div className="row">
                     <div className="col-lg-10"></div>
                     <div className="col-lg-2">

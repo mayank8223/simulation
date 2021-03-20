@@ -8,7 +8,7 @@ import { Modal } from "react-bootstrap";
 const MINIMUM_PRESSURE = 16;
 const GAME_ID = Math.floor(Math.random()*90000) + 10000;
 const USER_ID = Math.floor(Math.random() * 90000) + 10000;
-const BUDGET = "1200";
+const BUDGET = "900";
 
 class LoginComponent extends React.Component {
   constructor(props) {
@@ -154,7 +154,11 @@ class LoginComponent extends React.Component {
 
 class Block extends React.Component {
   render() {
-    const { isSink, label } = this.props;
+    const { isSink, label, isCorrectPressure } = this.props;
+
+    let color = "yellow";
+    if (isCorrectPressure) color = "red";
+     
     return (
       <div
         className="square"
@@ -168,7 +172,7 @@ class Block extends React.Component {
       >
         {this.props.pressure}
         {isSink ? (
-          <span style={{ fontSize: 18, color: "Yellow", fontWeight: "bold" }}>
+          <span style={{ fontSize: 18, color, fontWeight: "bold" }}>
             {label ? label : "Sink"}
           </span>
         ) : null}
@@ -182,26 +186,42 @@ class Grid extends React.Component {
     let color = Colors[this.props.grid[i][j]];
     let pressure = this.props.pressure[i][j];
 
-    let isSink = null,
-      label = null;
+    const point_1 = this.props.pressure[9] && this.props.pressure[9][21];
+    const point_2 = this.props.pressure[9] && this.props.pressure[9][51];
+    const point_3 = this.props.pressure[30] && this.props.pressure[30][51];
 
+    let isSink = null, label = null, isCorrectPressure = false;
+    console.log(
+      "point_1", point_1, typeof(point_1),
+      "point_2", point_2, typeof(point_2),
+      "point_3", point_3, typeof(point_3),
+    )
     const { isSubOptimal } = this.props;
     let { fontsize } = this.props;
     if (isSubOptimal) {
       if (i === 9 && j === 21) {
         isSink = true;
         label = "1";
-      } else if (i === 9 && j === 51) {
+        isCorrectPressure = point_1 === "17";
+      } 
+      else if (i === 9 && j === 51) {
         isSink = true;
         label = "2";
-      } else if (i === 30 && j === 51) {
+        isCorrectPressure = point_2 === "21";
+      }
+      else if (i === 30 && j === 51) {
         isSink = true;
         label = "3";
+        isCorrectPressure = point_3 === "25";
       }
       fontsize = 8;
     } else {
       // console.log("i", i, "j", j);
       if (i === 0 && j === this.props.pressure[i].length - 1) isSink = true;
+    }
+
+    if (isSink) {
+      console.log("isCorrectPressure", isCorrectPressure);
     }
 
     return (
@@ -218,6 +238,7 @@ class Grid extends React.Component {
         dimenw={this.props.dimenw}
         fontsize={fontsize}
         label={label}
+        isCorrectPressure={isCorrectPressure}
       />
     );
   }
@@ -539,7 +560,8 @@ export class Simulation extends React.Component {
     let dimenh = frach.toString() + "%";
     let board = 0;
     let message_list = [];
-    const timerSeconds = 900;
+    let timerSeconds = 900; 
+    
 
     for (let i = 0; i < size; i++) {
       let row = Array(size).fill("blank");
@@ -585,11 +607,20 @@ export class Simulation extends React.Component {
       showEndGameModal: false,
     };
   }
+
   componentDidMount() {
     const intervalId = setInterval(() => {
-      let { timerSeconds } = this.state;
-      timerSeconds = parseInt(timerSeconds) - 1;
-      this.setState({ timerSeconds });
+      let { timerSeconds, isSubOptimal, loggedIn } = this.state;
+      if (loggedIn) {
+        timerSeconds = parseInt(timerSeconds) - 1;
+        this.setState({timerSeconds})
+              if (timerSeconds <= 0) {  
+          this.handleSwitch(1);
+          if (!isSubOptimal) {
+            this.setState({showSubOptimalStatement: true, timerSeconds: 1800, isSubOptimal: true })
+          }
+        }
+      }
     }, 1000);
     this.setState({ intervalId });
   }
@@ -797,7 +828,7 @@ export class Simulation extends React.Component {
         }
         let game_id = this.state.game_id;
         WebSocketInstance.problemStatement1_completed(game_id, 16, 0, 0);
-        this.setState({ showSubOptimalStatement: true, isSubOptimal: true });
+        this.setState({ showSubOptimalStatement: true, isSubOptimal: true, timerSeconds: 1800 });
       }
     }
   }
@@ -1033,7 +1064,7 @@ export class Simulation extends React.Component {
             <div className="budget">
               <div className="budget-lhs">Timer</div>
               <div className="budget-rhs">
-                Min: {min} secs: {sec}
+               Min: {min} secs: {sec}
               </div>
             </div>
             <Controls
@@ -1068,8 +1099,7 @@ export class Simulation extends React.Component {
                   board === 1 ? (
                     `Abhishek(1), Ram(2), and shubham(3) needs a proper water connection with pressure of 17, 21,and 25PSI respectively help them to get the required pressure and budget remaining should be greater than zero.`
                   ) : (
-                    `Rohit in the city needs a water connection with a supply pressure of
-                    16PSI and his budget is 1200₹ help him to get a connection. udget remaining should be greater than zero`
+                    `Rohit in the city needs a water connection with a supply pressure of 16PSI and his budget is 900₹ help him to get a connection. Budget remaining should be greater than zero`
                   )
                 }
               </i>
@@ -1141,20 +1171,8 @@ function MarketTrends(props) {
           <div className="row">
             <div className="col-lg-12" style={{ margin: 10 }}>
               <img
-                src={"https://imgur.com/MJE0gu9.jpg"}
-                style={{ width: 608, height: 118 }}
-              />
-            </div>
-            <div className="col-lg-12" style={{ margin: 10 }}>
-              <img
-                src={"https://imgur.com/v8Vcfbg.jpg"}
-                style={{ width: 608, height: 118 }}
-              />
-            </div>
-            <div className="col-lg-12" style={{ margin: 10 }}>
-              <img
-                src={"https://imgur.com/boJRQDp.jpg"}
-                style={{ width: 608, height: 118 }}
+                src={"https://i.ibb.co/KbsR9vY/Table.jpg"}
+                style={{ width: 608, height: 350 }}
               />
             </div>
           </div>
@@ -1167,15 +1185,13 @@ function MarketTrends(props) {
 const SubOptimalStatement = (props) => {
   const { show, hide } = props;
   return (
-    <Modal show={show} onHide={hide}>
+    <Modal show={show} onHide={hide} size={"lg"}>
       <Modal.Header>
-        <Modal.Title>Problem statement 2</Modal.Title>
+        <Modal.Title>Practice</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h3>
         Abhishek(1), Ram(2), and shubham(3) needs a proper water connection with pressure of 17, 21,and 25PSI respectively 
         help them to get the required pressure and budget remaining should be greater than zero.
-        </h3>
       </Modal.Body>
       <Modal.Footer>
         <button className="btn btn-primary" onClick={hide}>
@@ -1189,15 +1205,12 @@ const SubOptimalStatement = (props) => {
 function ProblemStatement(props) {
   const { show, hide } = props;
   return (
-    <Modal show={show} onHide={hide}>
+    <Modal show={show} onHide={hide}  size={"lg"}>
       <Modal.Header>
-        <Modal.Title>Problem statement 1</Modal.Title>
+        <Modal.Title>Training Phase</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h3>
-          Rohit in the city needs a water connection with a supply pressure of
-          16PSI and his budget is 1200₹ help him to get a connection. udget remaining should be greater than zero
-        </h3>
+      Rohit in the city needs a water connection with a supply pressure of 16PSI and his budget is 900₹ help him to get a connection. Budget remaining should be greater than zero
       </Modal.Body>
       <Modal.Footer>
         <button className="btn btn-primary" onClick={hide}>
@@ -1213,10 +1226,10 @@ function GameEnd(props) {
   return (
     <Modal show={show} onHide={hide}>
       <Modal.Header>
-        <Modal.Title>Problem statement</Modal.Title>
+        <Modal.Title></Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h3>--- add text --</h3>
+        <h3>Task Completed</h3>
       </Modal.Body>
       <Modal.Footer>
         <button className="btn btn-primary" onClick={hide}>
